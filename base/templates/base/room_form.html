@@ -5,6 +5,12 @@
 <div>
     <form action="" method="POST">
         {%  csrf_token %}
+        <!-- to prevent Cross-Site Request Forgery (CSRF) -->
+        <!-- {{form}} -->
+        <!-- this gives all the host, topicm etc on a line -->
+        {{form.as_p}}
+        <!-- this will wrap a paragraph tag around every input field the form has -->
+        
 
         <input type="submit" value="Submit">
     </form>
