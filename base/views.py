@@ -1,6 +1,11 @@
-from django.http import request
-from django.db.models import Q
+from django.http import request, HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth.forms import UserCreationForm
 from .models import Room, Topic
 from .forms import RoomForm
 
@@ -11,6 +16,61 @@ from .forms import RoomForm
 #     {'id':2, 'name':'Design with me'},
 #     {'id':3, 'name':'Frontend developers'},
 # ]
+
+def loginPage(request):
+    page = 'login'
+    if request.user.is_authenticated:
+        return redirect('home')
+    #if the user is logged in no option to further got to login
+    #not through url on browser search top bar either
+    #if prompted, it will be redirected to home page of that user
+
+    if request.method == 'POST':
+        username = request.POST.get('username').lower() 
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(username = username)
+        except:
+            messages.error(request, 'User does not exist')
+
+        user = authenticate(request, username = username, password = password)
+
+        if user is not None:
+            login(request, user) #log the user in which creates a session in the database and the browser and the user is redirected to home page
+            return redirect('home')
+        else:
+            messages.error(request, 'Username OR password does not exist')
+
+    context ={'page': page}
+    return render(request, 'base/login_register.html', context)
+
+
+def logoutUser(request):
+    logout(request) #deletes that session token hence logouts the user
+    return redirect('home')
+
+
+def registerPage(request):
+    #page = 'register' # not needed since register shows up in the else statement in login_register.html
+    form = UserCreationForm()
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False) 
+            #commit=False: save the form and freezing it in time (the register) to execute the next statement
+            # we want to be able to create the user right away to get that user object
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'An error occured during')
+
+    context = {'form': form}
+    return render(request, 'base/login_register.html', context)
+
 
 def home(request): #pass in request object 
     q = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -52,6 +112,7 @@ def room(request, pk):
     return render(request, 'base/room.html', context)
 
 
+@login_required(login_url = '/login') #decorator
 def createRoom(request):
     form = RoomForm()
     if request.method == 'POST':
@@ -73,6 +134,9 @@ def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
 
+    if request.user != room.host:
+        return HttpResponse('You are not allowed here!!')
+
     if request.method == 'POST':
         form = RoomForm(request.POST, instance=room)
         #the instance=room is going to replace whatever value it was
@@ -86,6 +150,9 @@ def updateRoom(request, pk):
 
 def deleteRoom(request, pk):
     room = Room.objects.get(id=pk)
+
+    if request.user != room.host:
+        return HttpResponse('You are not allowed here!!')
 
     if request.method == 'POST':
         room.delete()

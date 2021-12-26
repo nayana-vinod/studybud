@@ -10,6 +10,16 @@
 
     {% include 'navbar.html' %}
 
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li>
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
     {% block content %}
     <!-- content here is specific to the url or page like home or room
     this content can be found on the corresponding .html file
