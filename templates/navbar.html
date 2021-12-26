@@ -2,4 +2,10 @@
     <h1>LOGO Home</h1>
 </a>
 
+<form method="GET" action="{% url 'home' %}">
+    <!-- default is GET so no need to set that -->
+    <!-- url homw: hence even if inside a room, on search it goes to home and displays the searched topics/rooms -->
+    <input type="text" name="q" placeholder="Search Rooms..."/>
+</form>
+
 <hr>

@@ -1,6 +1,7 @@
 from django.http import request
+from django.db.models import Q
 from django.shortcuts import render, redirect
-from .models import Room
+from .models import Room, Topic
 from .forms import RoomForm
 
 # Create your views here.
@@ -12,12 +13,29 @@ from .forms import RoomForm
 # ]
 
 def home(request): #pass in request object 
-    rooms = Room.objects.all()
-    context = {'rooms': rooms} #context dictionary
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    #without the inline if statement and the below rooms statement when 'all' is given, no topics will be shown since q=None
+    # rooms= Room.objects.filter(topic__name = q)
+
+    rooms = Room.objects.filter(
+        Q(topic__name__icontains = q) | #or parameter |
+        Q(name__icontains = q) |
+        Q(description__icontains = q) 
+        # Q(host__icontains = q) 
+        )
+    
+
+    # rooms = Room.objects.all()
+    topics = Topic.objects.all()
+    room_count = rooms.count() #django method
+    # or use len() method of python but count is faster
+
+    context = {'rooms': rooms, 'topics': topics, 'room_count': room_count} #context dictionary
     return render(request, 'base/home.html', context) 
     #any number of key:value pairs can be added here: 
     #'how we want to address it in the template: what we are passing in or here room dictionary defined on line 5
     # now we have access to this list on home.html
+
 
 def room(request, pk):
     #when using the room dictionary
