@@ -90,7 +90,17 @@ def home(request): #pass in request object
     room_count = rooms.count() #django method
     # or use len() method of python but count is faster
 
-    context = {'rooms': rooms, 'topics': topics, 'room_count': room_count} #context dictionary
+    room_messages = Message.objects.filter(
+        Q(room__name__icontains = q) |
+        Q(room__topic__name__icontains = q) | #or parameter |
+        Q(room__description__icontains = q) 
+        )
+    # OR
+    # room_messages = Message.objects.filter(Q(room__topic__name__icontains = q) )
+
+    context = {'rooms': rooms, 'topics': topics, 
+                'room_count': room_count,
+                'room_messages': room_messages} #context dictionary
     return render(request, 'base/home.html', context) 
     #any number of key:value pairs can be added here: 
     #'how we want to address it in the template: what we are passing in or here room dictionary defined on line 5

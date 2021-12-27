@@ -1,0 +1,12 @@
+<h3>Browse Topics</h3>
+<hr>
+<a href="{% url 'home' %}">All</a>
+{% for topic in topics %}
+    <div>
+        <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
+        <!-- check the url created on the top search bar of the browser -->
+        <!-- hence the queries can be typed manually on the search bar and the results can be shown -->
+        <!-- like 'http://127.0.0.1:8000/?q=web' -->
+    </div>
+
+{% endfor %}
