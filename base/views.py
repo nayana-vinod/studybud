@@ -142,6 +142,20 @@ def room(request, pk):
     return render(request, 'base/room.html', context)
 
 
+def userProfile(request,pk):
+    user = User.objects.get(id=pk)
+    rooms = user.room_set.all()
+    room_messages = user.message_set.all()
+    # room_messages = Message.objects.get(user = user)
+    topics = Topic.objects.all()
+    #rooms will be used in feed_component.html, there we use for room in rooms
+    #since this rooms will be passed to feed_component.html, it should have the same name as in feed_component
+    context ={'user': user, 'rooms': rooms,
+                'room_messages': room_messages,
+                'topics': topics}
+    return render(request, 'base/profile.html', context)
+
+
 @login_required(login_url = '/login') #decorator
 def createRoom(request):
     form = RoomForm()

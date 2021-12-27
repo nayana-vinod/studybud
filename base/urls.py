@@ -10,6 +10,7 @@ urlpatterns = [
     path('room/<str:pk>/', views.room, name="room"), #pass functions since in this case we are using function based views hence 'room' function as argument passing in
     #<dynamic value> and str for string, or use int, or slug. pk:primarykey
     # name can be used to mention the path here. this is useful since even if the url which is 'room/<str:pk>/' is changed it can be referenced using name='room'
+    path('profile/<str:pk>/', views.userProfile, name="user-profile"),
 
     path('create-room/', views.createRoom, name="create-room"),
     path('update-room/<str:pk>/', views.updateRoom, name="update-room"),
