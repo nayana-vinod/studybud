@@ -20,7 +20,8 @@ class Room(models.Model):
     description =  models.TextField(null=True, blank=True) 
     #null=true means null value or no value for description is allowed in the databse
     #blank=true means like when it's saved like a form, the form can be blank
-    # participants = 
+    participants = models.ManyToManyField(User, related_name='participants', blank=True)
+    #since host used User, another attribute using it needs related_name
     updated = models.DateTimeField(auto_now = True) 
     #every time the save stamp is clicked, it's gonna autosave the time and date
     created = models.DateTimeField(auto_now_add = True)

@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.forms import UserCreationForm
-from .models import Room, Topic
+from .models import Room, Topic, Message
 from .forms import RoomForm
 
 # Create your views here.
@@ -98,7 +98,7 @@ def home(request): #pass in request object
 
 
 def room(request, pk):
-    #when using the room dictionary
+    #when using the room dictionary instead of class
     # room = None 
     # for i in rooms:
     #     if i['id'] == int(pk):
@@ -107,8 +107,28 @@ def room(request, pk):
     #when using the room model
     room = Room.objects.get(id=pk) 
     #also argument should be something unique for checking in the database
-    context = {'room': room}
+    
+    room_messages = room.message_set.all().order_by('-created')
+    #in models.py class Message is child of class Room. 
+    #This class Message is refferred in message_set.all but use lower case
+    #now all messages of that particular room are in 'message'
+    #no need to import Message class since parent element is being referred
+    participants = room.participants.all()
 
+    if request.method == 'POST':
+        room_messages = Message.objects.create(
+        #import Message model
+            user = request.user,
+            room = room,
+            body = request.POST.get('body'), #reffered as body in room.html name=body
+        )
+        room.participants.add(request.user)
+        #afterevery message the messager will be added as a partipant
+        return redirect('room', pk=room.id)
+        #without redirect itself the form will be in that page and the page will refresh but
+
+    context = {'room': room, 'room_messages': room_messages,
+                'participants': participants}
     return render(request, 'base/room.html', context)
 
 
@@ -161,3 +181,17 @@ def deleteRoom(request, pk):
     return render(request, 'base/delete.html', {'obj': room})
     #in delete.html obj is referred there, since we are deleting a room we pass room here
     # passing room will return the str method of room in models.py which returns the room name 
+
+
+@login_required(login_url = '/login') #decorator
+def deleteMessage(request, pk):
+    message = Message.objects.get(id=pk)
+
+    if request.user != message.user:
+        return HttpResponse('You are not allowed here!!')
+    
+    if request.method == 'POST':
+        message.delete()
+        return redirect('home')
+    
+    return render(request, 'base/delete.html', {'obj': message})

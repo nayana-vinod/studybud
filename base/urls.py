@@ -12,6 +12,7 @@ urlpatterns = [
     # name can be used to mention the path here. this is useful since even if the url which is 'room/<str:pk>/' is changed it can be referenced using name='room'
 
     path('create-room/', views.createRoom, name="create-room"),
-    path('update-room/<str:pk>', views.updateRoom, name="update-room"),
-    path('delete-room/<str:pk>', views.deleteRoom, name="delete-room"),
+    path('update-room/<str:pk>/', views.updateRoom, name="update-room"),
+    path('delete-room/<str:pk>/', views.deleteRoom, name="delete-room"),
+    path('delete-message/<str:pk>/', views.deleteMessage, name="delete-message"),
 ] 
