@@ -1,3 +1,4 @@
+from django.contrib.auth import decorators
 from django.http import request, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -159,36 +160,66 @@ def userProfile(request,pk):
 @login_required(login_url = '/login') #decorator
 def createRoom(request):
     form = RoomForm()
+    topics = Topic.objects.all()
+    page = 'Create'
     if request.method == 'POST':
         # print(request.POST)
         # to print the form input details on the bash terminal on submitting
-        form = RoomForm(request.POST) #creates a new form
-        if form.is_valid():
-            form.save()
-            return redirect('home')
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        #if the topic already exists, created=false and new topic is not created
+        #if the topic already doesnt exist, created=true, and new topic will be created
+        #form = RoomForm(request.POST) #creates a new form
+
+        Room.objects.create(
+            host = request.user,
+            topic=topic,
+            name = request.POST.get('name'),
+            description = request.POST.get('description'),
+        )
+        #create method is used because we are customizing the topic
+        #and using the model form like below, is not quite easy
+
+        # if form.is_valid():
+        #     room = form.save(co mmit=False)
+        #     room.host = request.user
+        #     room.save()
+        return redirect('home')
         #instead of the above line we could do 'request.POST.get('name')'
         # and manually get every field but since the ModelForm was made it will take care of this automatically
 
 
-    context = {'form': form}
+    context = {'form': form, 'topics': topics, 'page':page}
     return render(request, 'base/room_form.html', context)
 
 
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
+    topics = Topic.objects.all()
+    page = 'Update'
 
     if request.user != room.host:
         return HttpResponse('You are not allowed here!!')
-
+    
     if request.method == 'POST':
-        form = RoomForm(request.POST, instance=room)
-        #the instance=room is going to replace whatever value it was
-        if form.is_valid():
-            form.save()
-            return redirect('home') #'home': name='home' in urls.py
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        room.name = request.POST.get('name')
+        room.description = request.POST.get('description')
+        room.topic = topic
+        room.save(  )
+        return redirect('home') #'home': name='home' in urls.py
 
-    context = {'form': form}
+    # if request.method == 'POST':
+    #     form = RoomForm(request.POST, instance=room)
+    #     #the instance=room is going to replace whatever value it was
+    #     if form.is_valid():
+    #         form.save()
+    #         return redirect('home') 
+
+    context = {'form': form, 'topics': topics,
+                 'page': page, 'room':room}
     return render(request, 'base/room_form.html', context)
 
 
@@ -216,6 +247,6 @@ def deleteMessage(request, pk):
     
     if request.method == 'POST':
         message.delete()
-        return redirect('home')
+        return redirect("'room' room.id")
     
     return render(request, 'base/delete.html', {'obj': message})

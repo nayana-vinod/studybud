@@ -1,13 +1,17 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyBud</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
+    <title>StudyBuddy - Find study partners around the world!</title>
+  </head>
 
+  <body>
+   
     {% include 'navbar.html' %}
 
     {% if messages %}
@@ -21,14 +25,9 @@
     {% endif %}
 
     {% block content %}
-    <!-- content here is specific to the url or page like home or room
-    this content can be found on the corresponding .html file
-    ie the block content in home.html will replace this space for '/' or home url
-    similarly the block content in room.html will replace this space for /room 
-    it's like IG has the same topbar and bottom bar on every page and that will be on main/html aka the files that repeat on each page
-    and the rest of the content specific to that page will be inside this block content.
-    and the content to here is refereneced through giving a block content in the corresponding file-->
+
     {% endblock %}
 
-</body>
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
 </html>
