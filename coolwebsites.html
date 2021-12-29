@@ -1,0 +1,45 @@
+<!-- completely different website from studybud, hence while implementing or trying it out,
+move to a different folder outside the whole studybud project and try -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cool Rooms</title>
+</head>
+<body>
+    
+    <h1>Cool Rooms</h1>
+
+    <div id="rooms-container">
+
+    </div>
+
+</body>
+
+<script>
+    let roomsContainer = document.getElementById('rooms-container')
+
+    let getRooms = async() => {
+        let response = await fetch('http://127.0.0.1:8000/api/rooms/')
+        let rooms = await response.json()
+        // we need to parse this data: with fetch api (that's a way to make requests),
+        // you can also use axios, jquery
+        // wiht fetch api: sending data - stringify it, get it - parse it and turn it back into json data
+        
+        for(let i=0; rooms.length>i ; i++ ){
+            let room = rooms[i]
+            let row = `<div>
+                            <h3>${room.name}</h3>
+                        </div>`
+            roomsContainer.innerHTML += row
+        }
+        console.log('rooms:', rooms)
+        
+        // console.log('RESPONSE: ', response)
+    }
+
+    getRooms()
+</script>
+</html>
