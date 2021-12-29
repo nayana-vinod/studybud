@@ -87,7 +87,8 @@ def home(request): #pass in request object
     
 
     # rooms = Room.objects.all()
-    topics = Topic.objects.all()
+    topics = Topic.objects.all()[0:4]
+    # only shows first 4
     room_count = rooms.count() #django method
     # or use len() method of python but count is faster
 
@@ -247,7 +248,8 @@ def deleteMessage(request, pk):
     
     if request.method == 'POST':
         message.delete()
-        return redirect("'room' room.id")
+        # return redirect("'room' room.id")
+        return redirect('home')
     
     return render(request, 'base/delete.html', {'obj': message})
 
@@ -264,3 +266,15 @@ def updateUser(request):
 
     # context={'form': form}
     return render(request, 'base/update-user.html', {'form': form})
+
+
+def topicsPage(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics = Topic.objects.filter(name__icontains = q)
+    return render(request, 'base/topics.html', {'topics': topics})
+
+
+def activityPage(request):
+    room_messages = Message.objects.all()
+    context = {'room_messages': room_messages }
+    return render(request, 'base/activity.html', )
