@@ -1,8 +1,24 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.db.models.deletion import CASCADE
+# from django.contrib.auth.models import User
+# from django.db.models.deletion import CASCADE
 
+from django.contrib.auth.models import AbstractUser
+#
 # Create your models here.
+
+
+#django to look at the new abstract user isntead of what we already had
+class User(AbstractUser):
+    name = models.CharField(max_length=200, null=True)
+    #no blank=true: this is a rewuired field
+    email = models.EmailField(null=True, unique=True)
+    bio = models.TextField(null=True)
+
+    avatar = models.ImageField(null=True, default="avatar.svg")
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS =[]
+
 
 class Topic(models.Model):
     name = models.CharField(max_length=200)
