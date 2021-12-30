@@ -5,28 +5,53 @@ Built using Django
 
 (developed with the help of https://www.youtube.com/watch?v=PtQiiknWUcI)
 
-Cloning the repository
+# StudyBuddy
+</div>
+
+### Cloning the repository
+
 --> Clone the repository using the command below :
-
+```bash
 git clone https://github.com/divanov11/StudyBud.git
---> Move into the directory where we have the project files :
 
+```
+
+--> Move into the directory with the project files : 
+```bash
 cd StudyBud
---> Create a virtual environment :
 
-# Let's install virtualenv first
+```
+
+--> Create a virtual environment :
+```bash
+# install virtualenv first
 pip install virtualenv
 
-# Then we create our virtual environment
+# Then create a virtual environment
 virtualenv envname
+
+```
+
 --> Activate the virtual environment :
-
+```bash
 envname\scripts\activate
+
+```
+
 --> Install the requirements :
-
+```bash
 pip install -r requirements.txt
-Running the App
---> To run the App, we use :
 
+```
+
+#
+
+### Running the App
+
+--> To run the App, use :
+```bash
 python manage.py runserver
-warning Then, the development server will be started at http://127.0.0.1:8000/
+
+```
+
+> ⚠ Then, the development server will be started at http://127.0.0.1:8000/
