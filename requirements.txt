@@ -9,13 +9,13 @@ certifi==2019.11.28
 chardet==4.0.0
 cliapp==1.0.9
 Click==7.0
-# cmdtest==0.32+git
-cmdtest 0.1.1
+cmdtest==0.32+git
+# cmdtest2 0.1.1
 colorama==0.4.3
 # command-not-found==0.3
 cors==1.0.1
 cryptography==36.0.1
-cipshelpers==1.0
+ciphelpers==1.0
 dbus-python==1.2.16
 defer==1.0.6
 distlib==0.3.2
