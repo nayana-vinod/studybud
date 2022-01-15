@@ -1,6 +1,14 @@
 #Apple Mac
 .DS_Store
 
+# website ss
+website_screenshots
+
+#for secret key
+.bash_profile
+.bash_profile.save
+secret_key.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

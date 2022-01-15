@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from unittest.mock import DEFAULT
+# import dotenv 
+# from dotenv import load_dotenv
+# SECRET_KEY = os.environ['SECRET_KEY']
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-f(79xr4t#jkq=of8z0%zl0k=53%5(aoh-pw^q_k(n14e+z090!'
+# SECRET_KEY = os.getenv('SECRET_KEY')
+# SECRET_KEY = os.environ.get('SECRET_KEY')
+with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,6 +51,8 @@ INSTALLED_APPS = [
     'rest_framework',
 
     "corsheaders",
+
+    'storages'
 ]
 
 AUTH_USER_MODEL = 'base.User'
@@ -128,9 +138,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-#CSS, JS, images in website
-STATIC_URL = '/static/'
-MEDIA_URL = '/image/'
+#CSS, JS, images in website: 
+# STATIC_URL = '/static/' #commented with aws s3
+
+# MEDIA_URL = '/image/' #commented with aws s3
+MEDIA_URL = 'storages.backends.s3boto3.S3StaticStorage/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
@@ -141,7 +153,9 @@ STATICFILES_DIRS = [
 #when that form gets submitted, media_root will tell django where to save it
 # in a production environment: aws s3 bucket etc will be used and upload it directly there
 #also the media url: now they will be prefixed with '/images'
-MEDIA_ROOT = BASE_DIR / 'static/images'
+
+# MEDIA_ROOT = BASE_DIR / 'static/images' #commented with aws s3
+MEDIA_ROOT = 'storages.backends.s3boto3.S3StaticStorage'
 
 # STATIC_ROOT = 
 
@@ -153,3 +167,36 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
  
 CORS_ALLOW_ALL_ORIGINS = True
 # by default this is false
+
+# adding variables from env varaibles for AWS S3
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+
+AWS_S3_FILE_OVERWRITE = False
+# if multiple users add files with same name, it wont be overwritten but the new files will have some new characters like uer_image33f appended at the end
+
+AWS_DEFAULT_ACL = None
+# this not being none will cause some issues, but it should be automatically None in future versions of django
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = 'static'
+  
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT  = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_URL = '/static/'
+
+# Extra lookup directories for collectstatic to find static files
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
+
+##just for control-z
