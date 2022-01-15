@@ -8,8 +8,8 @@ Built using Django, Django Rest Framework, AWS
 
 ## APIs
 - api/ - REST FRAMEWORK home page
-- api/rooms - details of all rooms
-- api/rooms/id - details of a particular room
+- api/rooms/ - details of all rooms
+- api/rooms/id/ - details of a room with the provided id 
 
 # StudyBuddy
 </div>
@@ -63,5 +63,5 @@ python manage.py runserver
 > ⚠ Then, the development server will be started at http://127.0.0.1:8000/
 
 ## Some Resources
-Traversy Media : https://www.youtube.com/watch?v=PtQiiknWUcI
-Corey Schafer Django Tutorials Playlist : https://www.youtube.com/playlist?list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p
+- [Traversy Media](https://www.youtube.com/watch?v=PtQiiknWUcI)
+- [Corey Schafer Django Tutorials Playlist](https://www.youtube.com/playlist?list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p)
