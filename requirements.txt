@@ -23,7 +23,7 @@ defer==1.0.6
 distlib==0.3.2
 distro==1.4.0
 distro-info===0.23ubuntu1
-Django==3.2.10
+Django==4.0.0
 django-cors-headers==3.10.1
 djangorestframework==3.13.1
 duplicity==0.8.12.0
