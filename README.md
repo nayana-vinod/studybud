@@ -1,9 +1,15 @@
 # studybud
 A Platform for learners where users can create rooms on different topics, ask queries, share knowledge, etc
+Features: create rooms, send messages in rooms, view user profiles, editing own profile, user auth, CRED, APIs, etc
 
-Built using Django
+Built using Django, Django Rest Framework, AWS
 
-(developed with the help of https://www.youtube.com/watch?v=PtQiiknWUcI)
+**Currenly Working On**: FIle Uploads and AWS S3
+
+## APIs
+- api/ - REST FRAMEWORK home page
+- api/rooms/ - details of all rooms
+- api/rooms/id/ - details of a room with the provided id 
 
 # StudyBuddy
 </div>
@@ -55,3 +61,7 @@ python manage.py runserver
 ```
 
 > ⚠ Then, the development server will be started at http://127.0.0.1:8000/
+
+## Some Resources
+- [Traversy Media](https://www.youtube.com/watch?v=PtQiiknWUcI)
+- [Corey Schafer Django Tutorials Playlist](https://www.youtube.com/playlist?list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p)
