@@ -11,14 +11,28 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import environ
 import os
 from unittest.mock import DEFAULT
 # import dotenv 
-# from dotenv import load_dotenv
 # SECRET_KEY = os.environ['SECRET_KEY']
+
+env = environ.Env()
+print(os.environ.get('SECRET_KEY'))
+
+# Set the project base directory
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+
+# Raises Django's ImproperlyConfigured
+# exception if SECRET_KEY not in os.environ
+# SECRET_KEY = env('SECRET_KEY')
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,7 +41,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = os.getenv('SECRET_KEY')
 # SECRET_KEY = os.environ.get('SECRET_KEY')
-with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
+
+#secretkey.txt
+with open(os.path.join(BASE_DIR, 'secret_key.py')) as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -50,9 +66,9 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    "corsheaders",
+    'corsheaders',
 
-    'storages'
+    'storages',
 ]
 
 AUTH_USER_MODEL = 'base.User'
@@ -142,10 +158,11 @@ USE_TZ = True
 # STATIC_URL = '/static/' #commented with aws s3
 
 # MEDIA_URL = '/image/' #commented with aws s3
-MEDIA_URL = 'storages.backends.s3boto3.S3StaticStorage/'
+MEDIA_URL = 'storages.backends.s3boto3.S3StaticStorage/' #commented to disable aws s3
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
+    # BASE_DIR / 'studybud' / 'static'
 ]
 
 #For user uploaded contents: tell django where to upload these user profile
@@ -155,7 +172,7 @@ STATICFILES_DIRS = [
 #also the media url: now they will be prefixed with '/images'
 
 # MEDIA_ROOT = BASE_DIR / 'static/images' #commented with aws s3
-MEDIA_ROOT = 'storages.backends.s3boto3.S3StaticStorage'
+MEDIA_ROOT = 'storages.backends.s3boto3.S3StaticStorage' #commented to disable aws s3
 
 # STATIC_ROOT = 
 
@@ -168,6 +185,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 # by default this is false
 
+#commented to disable aws s3
 # adding variables from env varaibles for AWS S3
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
@@ -187,16 +205,21 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
 AWS_LOCATION = 'static'
-  
+
 STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT  = os.path.join(PROJECT_ROOT, 'staticfiles')
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
+# commented to disable aws s3
 
+STATIC_URL = 'studybud/static/'
+
+# commented to disable aws s3
 # Extra lookup directories for collectstatic to find static files
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
+    #  os.path.join(PROJECT_ROOT, '/studybud/static'),
 )
 
 ##just for control-z

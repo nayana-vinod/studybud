@@ -10,7 +10,7 @@ from django.contrib.auth.models import AbstractUser
 #django to look at the new abstract user isntead of what we already had
 class User(AbstractUser):
     name = models.CharField(max_length=200, null=True)
-    #no blank=true: this is a rewuired field
+    #no blank=true: this is a requiired field
     email = models.EmailField(null=True, unique=True)
     bio = models.TextField(null=True)
 

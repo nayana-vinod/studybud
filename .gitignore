@@ -8,6 +8,9 @@ website_screenshots
 .bash_profile
 .bash_profile.save
 secret_key.txt
+secret_key.py
+/bash_profile
+.bash_profile.save
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
