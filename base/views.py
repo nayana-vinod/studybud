@@ -1,3 +1,4 @@
+from itertools import count
 from django.contrib.auth import decorators
 from django.http import request, HttpResponse
 from django.shortcuts import render, redirect
@@ -192,6 +193,11 @@ def createRoom(request):
         )
         #create method is used because we are customizing the topic
         #and using the model form like below, is not quite easy
+        # room = form.save(commit=False)
+
+        # automatically adding the host as a participant
+        # room = request.POST.get('id')
+        # room.participants.add(request.user)
 
         # if form.is_valid():
         #     room = form.save(co mmit=False)

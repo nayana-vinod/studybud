@@ -4,6 +4,9 @@
 # website ss
 website_screenshots
 
+#other fieles
+features.txt
+
 #for secret key
 .bash_profile
 .bash_profile.save
