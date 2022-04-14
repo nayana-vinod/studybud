@@ -1,6 +1,6 @@
 # studybud
 A Platform for learners where users can create rooms on different topics, ask queries, share knowledge, etc
-Features: create rooms, send messages in rooms, view user profiles, editing own profile, user auth, CRED, APIs, etc
+Features: create rooms, send messages in rooms, view user profiles, edit own profile, user auth, CRUD, APIs, etc
 
 Built using Django, Django Rest Framework, AWS
 
