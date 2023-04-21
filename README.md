@@ -18,7 +18,7 @@ Built using Django, Django Rest Framework, AWS
 
 --> Clone the repository using the command below :
 ```bash
-git clone https://github.com/divanov11/StudyBud.git
+https://github.com/nayana-vinod/studybud.git
 
 ```
 
